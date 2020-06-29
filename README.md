@@ -1,4 +1,5 @@
-#Financial Info Tracker
+# Financial Info Tracker
+
 A Python desktop application that allows users to manage their day to day finances. 
 Comes with the following built-in features:
 - Create multiple accounts that different users can use
