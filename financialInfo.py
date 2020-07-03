@@ -1,4 +1,5 @@
 from collections import defaultdict
+import json
 """
 Written by Aaron Shah
 6 / 27 / 2019
@@ -151,5 +152,24 @@ class financialInfo:
         yearly expenses
         """
         return self.income - self.calc_yearly_spending()
+
+    """
+    Save & read methods
+    """
+
+    def save_data(self, name):
+        """
+        returns dict of object items as dict
+        """
+        save_data = dict()
+        save_data["name"] = name
+        save_data["year"] = self.year
+        save_data["income"] = self.income
+        save_data["monthly_spending_info"] = dict()
+        for month in self.months:
+            save_data["monthly_spending_info"][month] = dict()
+            save_data["monthly_spending_info"][month]["mb"] = self.monthly_budget[month]
+            save_data["monthly_spending_info"][month]["mp"] = dict(self.monthly_purchases[month])
+        return save_data
 
 

@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAc
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 import re
+import json
 """
 Written by Aaron Shah
 7 / 3 / 2019
@@ -17,7 +18,7 @@ months = ["Jan", "Feb", "Mar",
           "Jul","Aug","Sep",
           "Oct","Nov","Dec"] #months in year
 v_p = re.compile("^[$]?[0-9]*[.]?[0-9]+$") #check for valid price
-
+SAVE_FILE= "save_data.json"
 """
 Global methods
 """
@@ -61,6 +62,18 @@ def init_button(window, text, func, x = 0, y = 0):
     button.move(x, y)
     return button
 
+def save():
+    """
+    Saves data onto JSON file
+    """
+    save_dict = dict()
+    save_dict["names"] = []
+    print(save_dict)
+    for k,v in user.items():
+        save_dict["names"].append(v.save_data(k))
+    print(save_dict)
+    with open(SAVE_FILE, 'w') as save_file:
+        json.dump(save_dict, save_file)
 """
 Program classes
 """
@@ -261,6 +274,9 @@ class MonthManagement(QWidget):
         yearly_profit = "Current Yearly Profit: $" + str(user[self.name].calc_net_yearly_profit())
         self.yearly_profit.setText(yearly_profit)
 
+        # saves user data
+        save()
+
 class MonthlySpendingChecker(QWidget):
     """
     Lets users and add and remove items for each month
@@ -407,12 +423,15 @@ class MonthlySpendingChecker(QWidget):
 
     def update_labels(self):
         """
-        updates labels
+        updates labels & saves user data
         """
         monthly_profit = "Current Monthly Profit: $" + str(user[self.name].calc_net_monthly_profit(self.month))
         self.monthly_profit.setText(monthly_profit)
         monthly_income = "Current Monthly Income: $" + str(user[self.name].get_monthly_budget(self.month))
         self.monthly_income.setText(monthly_income)
+
+        # saves user data
+        save()
         
     def update_item_table(self):
         """
